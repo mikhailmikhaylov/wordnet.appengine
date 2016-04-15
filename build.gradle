@@ -1,0 +1,39 @@
+group 'org.redblaq'
+version '1-FINAL'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.30'
+    }
+}
+
+apply plugin: 'java'
+
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'javax.servlet:javax.servlet-api:4.0.0-b01'
+
+    compile "com.google.appengine:appengine-api-1.0-sdk:1.9.30"
+    appengineSdk "com.google.appengine:appengine-java-sdk:1.9.30"
+}
+
+appengine {
+    httpPort = 8080
+    downloadSdk = true
+
+    jvmFlags = ['-Xdebug', '-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005']
+
+    appcfg {
+        noCookies = true
+        oauth2 = true
+    }
+}
