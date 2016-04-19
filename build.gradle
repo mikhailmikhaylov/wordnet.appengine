@@ -20,10 +20,13 @@ repositories {
 }
 
 dependencies {
+    //TODO Consider upgrading appengine sdk
     compile 'javax.servlet:javax.servlet-api:4.0.0-b01'
 
     compile "com.google.appengine:appengine-api-1.0-sdk:1.9.30"
     appengineSdk "com.google.appengine:appengine-java-sdk:1.9.30"
+
+    compile files("lib/jaws-bin.jar")
 }
 
 appengine {

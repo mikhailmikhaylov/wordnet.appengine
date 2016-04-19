@@ -13,4 +13,8 @@
 
     <async-session-persistence enabled="true"/>
 
+    <!--<static-files>-->
+        <!--<include path="/webapp/stuff/**"/>-->
+    <!--</static-files>-->
+
 </appengine-web-app>
