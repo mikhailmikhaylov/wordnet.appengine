@@ -66,7 +66,7 @@ import java.util.*;
     }
 
     private void prepareKnownWords() {
-        String[] splitKnownWords = BaseWordsStore.VALUE.split(" ");
+        String[] splitKnownWords = BaseWordsStore.DEMO_VALUE.split(" ");
         final List<Word> knownWords = new ArrayList<>(splitKnownWords.length);
 
         for (String word : splitKnownWords) {
