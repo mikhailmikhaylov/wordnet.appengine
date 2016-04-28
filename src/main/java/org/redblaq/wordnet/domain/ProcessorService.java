@@ -16,7 +16,12 @@ public class ProcessorService {
 
     // TODO Migrate API
     public String process(String input) {
-        final List<String> words = new WordProcessor(input).obtainUniqueWords();
+        final List<String> words = new WordProcessor(input, false).obtainUniqueWords();
+        return Joiner.on(OUTPUT_SEPARATOR).join(words);
+    }
+
+    public String processDemo(String input) {
+        final List<String> words = new WordProcessor(input, true).obtainUniqueWords();
         return Joiner.on(OUTPUT_SEPARATOR).join(words);
     }
 }

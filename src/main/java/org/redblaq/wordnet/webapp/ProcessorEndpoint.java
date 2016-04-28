@@ -18,7 +18,7 @@ public class ProcessorEndpoint extends HttpServlet {
 
         final String input = extractInput(request);
         // Hello and welcome to appengine! Minute -> crash
-        final String output = ServiceProvider.INSTANCE.obtainProcessorService().process(input);
+        final String output = ServiceProvider.INSTANCE.obtainProcessorService().processDemo(input);
 
         respond(response, output);
     }

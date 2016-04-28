@@ -14,10 +14,14 @@ import java.util.*;
     private List<Word> inputWords;
     private List<Word> uniqueInput;
 
-    WordProcessor(String input) {
+    WordProcessor(String input, boolean demo) {
         this.input = input;
         database = WordNetDatabase.getFileInstance();
-        prepareKnownWords();
+        if (demo) {
+            prepareDemoWords();
+        } else {
+            prepareKnownWords();
+        }
         prepareInput();
         obtainUniqueInput();
     }
@@ -65,8 +69,16 @@ import java.util.*;
         return word.substring(0, index);
     }
 
+    private void prepareDemoWords() {
+        prepareKnownOrDemoWords(BaseWordsStore.DEMO_VALUE);
+    }
+
     private void prepareKnownWords() {
-        String[] splitKnownWords = BaseWordsStore.DEMO_VALUE.split(" ");
+        prepareKnownOrDemoWords(BaseWordsStore.VALUE);
+    }
+
+    private void prepareKnownOrDemoWords(String input) {
+        String[] splitKnownWords = input.split(" ");
         final List<Word> knownWords = new ArrayList<>(splitKnownWords.length);
 
         for (String word : splitKnownWords) {
