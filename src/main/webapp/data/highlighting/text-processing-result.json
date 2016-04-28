@@ -1,0 +1,16 @@
+{
+	unknownWords: [
+		{ 
+			baseForm: "lorem", 
+			matchingWords:  [ 
+				{ word: "Lorem", position: 0 } 
+			]
+		},	
+		{
+			baseForm: "exercitate",
+			matchingWords: [ 
+				{ word: "exercitation", position: 163 } 
+			]
+		}
+	]
+}
