@@ -27,6 +27,9 @@ dependencies {
     appengineSdk "com.google.appengine:appengine-java-sdk:1.9.30"
 
     compile files("lib/jaws-bin.jar")
+
+    compile 'org.slf4j:slf4j-api:1.7.21'
+    compile 'org.slf4j:slf4j-jdk14:1.7.21'
 }
 
 appengine {

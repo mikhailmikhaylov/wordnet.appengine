@@ -2,8 +2,10 @@ package org.redblaq.wordnet.webapp;
 
 import org.redblaq.wordnet.domain.ProcessorService;
 
-// Because I don't care
-/* package */ enum ServiceProvider {
+/**
+ * Service Injection anti-pattern instead
+ */
+public enum ServiceProvider {
     INSTANCE;
 
     private final ProcessorService processorService = new ProcessorService();

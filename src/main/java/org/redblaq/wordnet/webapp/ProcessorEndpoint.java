@@ -20,11 +20,15 @@ public class ProcessorEndpoint extends HttpServlet {
         // Hello and welcome to appengine! Minute -> crash
         final String output = ServiceProvider.INSTANCE.obtainProcessorService().process(input);
 
-        response.setContentType(TEXT_CONTENT_TYPE);
-        response.getWriter().write(output); // wow such style
+        respond(response, output);
     }
 
     private static String extractInput(HttpServletRequest request) {
         return request.getParameter(INPUT_ATTRIBUTE_NAME);
+    }
+
+    private static void respond(HttpServletResponse response, String output) throws IOException {
+        response.setContentType(TEXT_CONTENT_TYPE);
+        response.getWriter().write(output);
     }
 }
