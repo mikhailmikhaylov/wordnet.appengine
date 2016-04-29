@@ -1,4 +1,4 @@
-package org.redblaq.wordnet.webapp.queue;
+package org.redblaq.wordnet.webapp.endpoints;
 
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -15,8 +15,8 @@ import java.util.UUID;
 // https://cloud.google.com/appengine/docs/java/taskqueue/overview-push
 public class Enqueue extends HttpServlet {
 
-    /* package */ static final String ARGUMENT = "enqueue-arg";
-    /* package */ static final String TASK_ID = "task-id";
+    public static final String ARGUMENT = "enqueue-arg";
+    public static final String TASK_ID = "task-id";
     private static final String WORKER_URL = "/worker";
 
     @Override

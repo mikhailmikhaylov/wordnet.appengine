@@ -1,10 +1,12 @@
-package org.redblaq.wordnet.domain;
+package org.redblaq.wordnet.domain.services;
 
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
+import org.redblaq.wordnet.domain.entities.Word;
 
 import java.util.*;
 
+// TODO refactor
 /* package */ class WordProcessor {
 
     private final String input;
@@ -14,14 +16,11 @@ import java.util.*;
     private List<Word> inputWords;
     private List<Word> uniqueInput;
 
-    WordProcessor(String input, boolean demo) {
+    WordProcessor(String input) {
         this.input = input;
         database = WordNetDatabase.getFileInstance();
-        if (demo) {
-            prepareDemoWords();
-        } else {
-            prepareKnownWords();
-        }
+
+        prepareBaseWords();
         prepareInput();
         obtainUniqueInput();
     }
@@ -69,28 +68,8 @@ import java.util.*;
         return word.substring(0, index);
     }
 
-    private void prepareDemoWords() {
-        prepareKnownOrDemoWords(BaseWordsStore.DEMO_VALUE);
-    }
-
-    private void prepareKnownWords() {
-        prepareKnownOrDemoWords(BaseWordsStore.VALUE);
-    }
-
-    private void prepareKnownOrDemoWords(String input) {
-        String[] splitKnownWords = input.split(" ");
-        final List<Word> knownWords = new ArrayList<>(splitKnownWords.length);
-
-        for (String word : splitKnownWords) {
-            Word w = buildWord(word);
-            if (w != null) {
-                knownWords.add(w);
-            }
-        }
-
-        this.knownWords = knownWords;
-
-        prepareUserWords();
+    private void prepareBaseWords() {
+        knownWords = OfyService.objectify().load().type(Word.class).list();
     }
 
     private void prepareUserWords() {

@@ -5,19 +5,27 @@
          http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <servlet>
         <servlet-name>ProcessorEndpoint</servlet-name>
-        <servlet-class>org.redblaq.wordnet.webapp.ProcessorEndpoint</servlet-class>
+        <servlet-class>org.redblaq.wordnet.webapp.endpoints.ProcessorEndpoint</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Enqueue</servlet-name>
-        <servlet-class>org.redblaq.wordnet.webapp.queue.Enqueue</servlet-class>
+        <servlet-class>org.redblaq.wordnet.webapp.endpoints.Enqueue</servlet-class>
     </servlet>
     <servlet>
         <servlet-name>Worker</servlet-name>
         <servlet-class>org.redblaq.wordnet.webapp.queue.Worker</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>SystemWorker</servlet-name>
+        <servlet-class>org.redblaq.wordnet.webapp.queue.SystemWorker</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>CacheReader</servlet-name>
-        <servlet-class>org.redblaq.wordnet.webapp.CacheReaderEndpoint</servlet-class>
+        <servlet-class>org.redblaq.wordnet.webapp.endpoints.CacheReaderEndpoint</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>OneTimeOperationsDispatcher</servlet-name>
+        <servlet-class>org.redblaq.wordnet.webapp.endpoints.OneTimeOperationsDispatcher</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>ProcessorEndpoint</servlet-name>
@@ -32,10 +40,27 @@
         <url-pattern>/worker</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
+        <servlet-name>SystemWorker</servlet-name>
+        <url-pattern>/systemworker</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
         <servlet-name>CacheReader</servlet-name>
         <url-pattern>/cache</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>OneTimeOperationsDispatcher</servlet-name>
+        <url-pattern>/onetimeops</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>
     </welcome-file-list>
+
+    <filter>
+        <filter-name>ObjectifyFilter</filter-name>
+        <filter-class>com.googlecode.objectify.ObjectifyFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>ObjectifyFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 </web-app>

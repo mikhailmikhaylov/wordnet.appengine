@@ -30,6 +30,8 @@ dependencies {
 
     compile 'org.slf4j:slf4j-api:1.7.21'
     compile 'org.slf4j:slf4j-jdk14:1.7.21'
+
+    compile 'com.googlecode.objectify:objectify:5.1.12'
 }
 
 appengine {

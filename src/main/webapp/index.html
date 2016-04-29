@@ -6,13 +6,6 @@
 </head>
 <body>
 <div>
-    <form action="/processor" method="post">
-        WordNet knows: "abandon ability able about door"<br>
-        Text:<br>
-        <input type="text" name="input" value="abandon ability ABBLIWITY"><br>
-        <input type="submit" value="Submit">
-    </form>
-    <br><br>
     <form action="/enqueue" method="post">
         ENQUEUE<br>
         Text:<br>
@@ -24,6 +17,11 @@
         RESULTS<br>
         Task Id:<br>
         <input type="text" name="task-id" value=""><br>
+        <input type="submit" value="Submit">
+    </form>
+    <form action="/onetimeops" method="post">
+        PRECACHE DB<br>
+        <input type="hidden" name="operation" value="ProcessBaseWords"><br>
         <input type="submit" value="Submit">
     </form>
 </div>

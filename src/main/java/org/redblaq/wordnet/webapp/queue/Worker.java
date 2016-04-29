@@ -1,9 +1,8 @@
 package org.redblaq.wordnet.webapp.queue;
 
-import org.redblaq.wordnet.webapp.CacheService;
-import org.redblaq.wordnet.webapp.ServiceProvider;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.redblaq.wordnet.webapp.endpoints.Enqueue;
+import org.redblaq.wordnet.webapp.services.CacheService;
+import org.redblaq.wordnet.webapp.services.ServiceProvider;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,7 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class Worker extends HttpServlet {
-    private final Logger log = LoggerFactory.getLogger(Worker.class);
+    private static final String TASK_IN_PROGRESS = "---IN-PROGRESS---";
     private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
 
     @Override
@@ -20,18 +19,10 @@ public class Worker extends HttpServlet {
         final String taskId = req.getParameter(Enqueue.TASK_ID);
         final String argument = req.getParameter(Enqueue.ARGUMENT);
 
-        logI("----- " + taskId + " : " + argument);
-        cacheService.store(taskId, "---IN-PROGRESS---");
+        cacheService.store(taskId, TASK_IN_PROGRESS);
 
         final String result = ServiceProvider.INSTANCE.obtainProcessorService().process(argument);
-        logI("----- " + taskId + " : " + result);
 
         cacheService.store(taskId, result);
-    }
-
-    private void logI(String message) {
-        if (log.isInfoEnabled()) {
-            log.info(message);
-        }
     }
 }

@@ -1,4 +1,4 @@
-package org.redblaq.wordnet.webapp;
+package org.redblaq.wordnet.webapp.services;
 
 import com.google.appengine.api.memcache.MemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
