@@ -18,11 +18,14 @@ public class Word {
 
     private final ArrayList<String> allForms = new ArrayList<>();
 
+    private int genHashCode = 0;
+
     // Objectify constructor
     private Word() {}
 
     public Word(String value) {
         this.baseWord = value;
+        reGenerateHash();
     }
 
     public String getBaseWord() {
@@ -34,13 +37,15 @@ public class Word {
             allForms.clear();
         }
         this.forms.add(form);
+        reGenerateHash();
     }
 
-    public void addForms(String[] forms) {
+    public void addForms(List<String> forms) {
         if (allForms.size() > 0) {
             allForms.clear();
         }
-        this.forms.addAll(Arrays.asList(forms));
+        this.forms.addAll(forms);
+        reGenerateHash();
     }
 
     @SuppressWarnings("unchecked")
@@ -52,12 +57,17 @@ public class Word {
      * Includes base form.
      */
     @SuppressWarnings("unchecked")
-    private List<String> getAllForms() {
+    public List<String> getAllForms() {
         if (allForms.size() == 0) {
             allForms.add(baseWord);
             allForms.addAll(forms);
         }
         return (List<String>) allForms.clone();
+    }
+
+    // Should be run on every mutation
+    private void reGenerateHash() {
+        genHashCode = 31 * forms.hashCode() + baseWord.hashCode();
     }
 
     @Override
@@ -83,5 +93,10 @@ public class Word {
             }
         }
         return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return genHashCode;
     }
 }

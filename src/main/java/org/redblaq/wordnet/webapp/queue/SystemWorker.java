@@ -39,6 +39,8 @@ public class SystemWorker extends HttpServlet {
 
             for (String wordRaw : wordsRaw) {
                 final Word word = new Word(wordRaw);
+                // No need to build forms, I suppose. Needs result comparison
+                // final Word word = ServiceProvider.obtainService(WordService.class).buildWord(wordRaw);
                 OfyService.objectify().save().entity(word).now();
             }
 

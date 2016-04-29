@@ -1,5 +1,8 @@
 package org.redblaq.wordnet.webapp.queue;
 
+import org.codehaus.jackson.map.ObjectMapper;
+import org.redblaq.wordnet.domain.entities.TextEntry;
+import org.redblaq.wordnet.domain.entities.dto.ResponseDto;
 import org.redblaq.wordnet.webapp.endpoints.Enqueue;
 import org.redblaq.wordnet.webapp.services.CacheService;
 import org.redblaq.wordnet.webapp.services.ServiceProvider;
@@ -9,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 public class Worker extends HttpServlet {
     private static final String TASK_IN_PROGRESS = "---IN-PROGRESS---";
@@ -21,8 +25,13 @@ public class Worker extends HttpServlet {
 
         cacheService.store(taskId, TASK_IN_PROGRESS);
 
-        final String result = ServiceProvider.INSTANCE.obtainProcessorService().process(argument);
+        final List<TextEntry> textEntries = ServiceProvider.INSTANCE.obtainProcessorService().processText(argument);
 
-        cacheService.store(taskId, result);
+        final ResponseDto result = ResponseDto.of(textEntries);
+
+        final ObjectMapper mapper = new ObjectMapper();
+        final String jsonResult = mapper.writeValueAsString(result);
+
+        cacheService.store(taskId, jsonResult);
     }
 }
