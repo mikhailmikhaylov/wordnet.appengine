@@ -7,6 +7,8 @@ import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.dto.ResponseDto;
 import org.redblaq.wordnet.webapp.services.CacheService;
 import org.redblaq.wordnet.webapp.services.ServiceProvider;
+import org.redblaq.wordnet.webapp.util.Arguments;
+import org.redblaq.wordnet.webapp.util.Responses;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,24 +19,21 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
-import static org.redblaq.wordnet.webapp.endpoints.Enqueue.ARGUMENT;
-import static org.redblaq.wordnet.webapp.endpoints.Enqueue.TASK_ID;
-
 public class ChunkProcessorWorker extends HttpServlet {
 
-    private static final String PROCESSING_ERROR = "---ERROR---";
     /* package */ static final String URL = "/worker/chunk";
     private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
     private final Logger log = LoggerFactory.getLogger(ChunkProcessorWorker.class);
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String taskId = req.getParameter(TASK_ID);
-        final String subtaskId = req.getParameter(Worker.SUBTASK_ID);
-        final String argument = req.getParameter(ARGUMENT);
-        final int chunkOffset = Integer.parseInt(req.getParameter(Worker.CHUNK_OFFSET));
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp)
+            throws ServletException, IOException {
+        final String taskId = req.getParameter(Arguments.TASK_ID.toString());
+        final String subtaskId = req.getParameter(Arguments.CHUNK_TASK_ID.toString());
+        final String argument = req.getParameter(Arguments.ARGUMENT.toString());
+        final int chunkOffset = Integer.parseInt(req.getParameter(Arguments.CHUNK_OFFSET.toString()));
 
-        cacheService.store(subtaskId, Worker.TASK_IN_PROGRESS);
+        cacheService.store(subtaskId, Responses.IN_PROGRESS.getText());
 
         final List<TextEntry> textEntries = ServiceProvider.INSTANCE
                 .obtainProcessorService().process(argument, chunkOffset);
@@ -44,15 +43,13 @@ public class ChunkProcessorWorker extends HttpServlet {
         final ObjectMapper mapper = new ObjectMapper();
         final String jsonResult = mapper.writeValueAsString(result);
 
-        logI("--------- " + jsonResult);
-
         cacheService.store(subtaskId, jsonResult);
 
         collectResult(taskId);
     }
 
     private void collectResult(String taskId) {
-        final String subtasksId = Worker.getSubtasksId(taskId);
+        final String subtasksId = Worker.getSubTasksId(taskId);
         final String joinedSubtasks = cacheService.retrieve(subtasksId);
 
         final String[] subtaskIds = InputUtil.split(joinedSubtasks);
@@ -85,7 +82,7 @@ public class ChunkProcessorWorker extends HttpServlet {
             cacheService.store(taskId, jsonResult);
         } catch (IOException e) {
             logE(e);
-            cacheService.store(taskId, PROCESSING_ERROR);
+            cacheService.store(taskId, Responses.ERROR.getText());
         }
     }
 
@@ -108,7 +105,7 @@ public class ChunkProcessorWorker extends HttpServlet {
         log.error(e.getMessage());
     }
 
-    private boolean isTaskInProgress(String subtaskResult) {
-        return Worker.TASK_IN_PROGRESS.equals(subtaskResult);
+    private boolean isTaskInProgress(String subTaskResult) {
+        return Responses.IN_PROGRESS.getText().equals(subTaskResult);
     }
 }

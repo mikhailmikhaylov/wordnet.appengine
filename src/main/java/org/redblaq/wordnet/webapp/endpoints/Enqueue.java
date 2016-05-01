@@ -3,6 +3,8 @@ package org.redblaq.wordnet.webapp.endpoints;
 import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
+import org.redblaq.wordnet.webapp.queue.Worker;
+import org.redblaq.wordnet.webapp.util.Arguments;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -12,33 +14,25 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.UUID;
 
+import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
+
 // https://cloud.google.com/appengine/docs/java/taskqueue/overview-push
 public class Enqueue extends HttpServlet {
 
-    public static final String ARGUMENT = "enqueue-arg";
-    public static final String TASK_ID = "task-id";
-    private static final String WORKER_URL = "/worker";
-
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        final String requestArgument = request.getParameter(ARGUMENT);
+        final String requestArgument = request.getParameter(Arguments.ARGUMENT.toString());
         validateArgument(requestArgument);
         final Queue queue = QueueFactory.getDefaultQueue();
 
         final String taskId = UUID.randomUUID().toString();
 
         queue.add(TaskOptions.Builder
-                .withUrl(WORKER_URL)
-                .param(ARGUMENT, requestArgument)
-                .param(TASK_ID, taskId));
+                .withUrl(Worker.URL)
+                .param(Arguments.ARGUMENT.toString(), requestArgument)
+                .param(Arguments.TASK_ID.toString(), taskId));
 
         respondRaw(response, taskId);
-    }
-
-    private void respondRaw(HttpServletResponse response, String value) throws IOException {
-        final PrintWriter responseWriter = response.getWriter();
-        responseWriter.write(value);
-        responseWriter.close();
     }
 
     private void validateArgument(String argument) {

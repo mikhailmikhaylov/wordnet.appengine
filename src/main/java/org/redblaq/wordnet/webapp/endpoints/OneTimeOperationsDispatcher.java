@@ -8,6 +8,8 @@ import com.google.common.collect.ImmutableMap;
 import org.redblaq.wordnet.domain.BaseWordsStore;
 import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.webapp.queue.SystemWorker;
+import org.redblaq.wordnet.webapp.util.Arguments;
+import org.redblaq.wordnet.webapp.util.Responses;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -20,14 +22,12 @@ import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
 
 public class OneTimeOperationsDispatcher extends HttpServlet {
 
-    public static final String OPERATION_ARG = "operation";
-
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String operationName = req.getParameter(OPERATION_ARG);
+        final String operationName = req.getParameter(Arguments.OPERATION.toString());
         final Function<HttpServletRequest, String> operation = operations.get(operationName);
         if (operation == null) {
-            respondRaw(resp, "Unknown operation");
+            respondRaw(resp, Responses.UNKNOWN_OPERATION.getText());
             return;
         }
         final String operationResult = operation.apply(req);
@@ -41,7 +41,6 @@ public class OneTimeOperationsDispatcher extends HttpServlet {
 
     private static class ProcessBaseWords implements Function<HttpServletRequest, String> {
         private static final int CHUNK_SIZE = 100;
-        private static final String RESPONSE = "Chunks enqueued";
 
         @Override
         public String apply(HttpServletRequest ignored) {
@@ -64,16 +63,17 @@ public class OneTimeOperationsDispatcher extends HttpServlet {
                 enqueueChunkWrite(chunk);
             }
 
-            return RESPONSE;
+            return Responses.CHUNKS_ENQUEUED.getText();
         }
 
         private void enqueueChunkWrite(String[] wordsRawChunk) {
             final Queue queue = QueueFactory.getDefaultQueue();
             final String argumentValue = InputUtil.join(wordsRawChunk, InputUtil.WORDS_SEPARATOR);
             queue.add(TaskOptions.Builder
-                    .withUrl("/systemworker")
-                    .param(OPERATION_ARG, SystemWorker.StoreBaseWordsChunk.class.getSimpleName())
-                    .param(SystemWorker.VALUE_ARG, argumentValue));
+                    .withUrl(SystemWorker.URL)
+                    .param(Arguments.OPERATION.toString(),
+                            SystemWorker.StoreBaseWordsChunk.class.getSimpleName())
+                    .param(Arguments.ARGUMENT.toString(), argumentValue));
         }
     }
 }

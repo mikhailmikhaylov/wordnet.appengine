@@ -6,6 +6,7 @@ import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.domain.services.OfyService;
 import org.redblaq.wordnet.webapp.endpoints.OneTimeOperationsDispatcher;
 import org.redblaq.wordnet.domain.entities.Word;
+import org.redblaq.wordnet.webapp.util.Arguments;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -15,11 +16,11 @@ import java.io.IOException;
 
 public class SystemWorker extends HttpServlet {
 
-    public static final String VALUE_ARG = "value";
+    public static final String URL = "/worker/system";
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        final String operation = req.getParameter(OneTimeOperationsDispatcher.OPERATION_ARG);
+        final String operation = req.getParameter(Arguments.OPERATION.toString());
 
         operations.get(operation).apply(req);
     }
@@ -33,7 +34,7 @@ public class SystemWorker extends HttpServlet {
 
         @Override
         public Void apply(HttpServletRequest request) {
-            final String input = request.getParameter(VALUE_ARG);
+            final String input = request.getParameter(Arguments.ARGUMENT.toString());
             final String[] wordsRaw = input.split(InputUtil.WORDS_SEPARATOR);
 
             for (String wordRaw : wordsRaw) {

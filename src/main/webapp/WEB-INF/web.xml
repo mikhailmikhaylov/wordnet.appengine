@@ -41,7 +41,7 @@
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SystemWorker</servlet-name>
-        <url-pattern>/systemworker</url-pattern>
+        <url-pattern>/worker/system</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>CacheReader</servlet-name>
