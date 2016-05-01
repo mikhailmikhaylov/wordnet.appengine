@@ -1,5 +1,8 @@
 package org.redblaq.wordnet.webapp.util;
 
+/**
+ * Common application non-json responses.
+ */
 public enum Responses {
 
     UNKNOWN_OPERATION {
