@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 
-import static org.redblaq.wordnet.webapp.ServletHelper.respondRaw;
+import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
 
 public class OneTimeOperationsDispatcher extends HttpServlet {
 

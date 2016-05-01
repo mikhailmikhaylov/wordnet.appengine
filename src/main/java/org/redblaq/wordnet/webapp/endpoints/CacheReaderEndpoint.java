@@ -1,7 +1,7 @@
 package org.redblaq.wordnet.webapp.endpoints;
 
 import com.google.appengine.repackaged.com.google.api.client.util.Strings;
-import org.redblaq.wordnet.webapp.ServletHelper;
+import org.redblaq.wordnet.webapp.util.ServletHelper;
 import org.redblaq.wordnet.webapp.services.ServiceProvider;
 import org.redblaq.wordnet.webapp.services.CacheService;
 

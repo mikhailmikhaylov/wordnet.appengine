@@ -1,4 +1,4 @@
-package org.redblaq.wordnet.webapp;
+package org.redblaq.wordnet.webapp.util;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
