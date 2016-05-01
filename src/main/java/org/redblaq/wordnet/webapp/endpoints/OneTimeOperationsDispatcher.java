@@ -20,6 +20,10 @@ import java.util.Arrays;
 
 import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
 
+/**
+ * An endpoint for uncommon operations.
+ * <p>Enqueues them into a specific queue.
+ */
 public class OneTimeOperationsDispatcher extends HttpServlet {
 
     @Override
@@ -39,6 +43,10 @@ public class OneTimeOperationsDispatcher extends HttpServlet {
                     .put(ProcessBaseWords.class.getSimpleName(), new ProcessBaseWords())
                     .build();
 
+    /**
+     * An operation, which retrieves base 3k words from BaseWordsStore and saves them into DataStore
+     * in chunks.
+     */
     private static class ProcessBaseWords implements Function<HttpServletRequest, String> {
         private static final int CHUNK_SIZE = 100;
 
@@ -66,6 +74,9 @@ public class OneTimeOperationsDispatcher extends HttpServlet {
             return Responses.CHUNKS_ENQUEUED.getText();
         }
 
+        /**
+         * Enqueues chunk saving.
+         */
         private void enqueueChunkWrite(String[] wordsRawChunk) {
             final Queue queue = QueueFactory.getDefaultQueue();
             final String argumentValue = InputUtil.join(wordsRawChunk, InputUtil.WORDS_SEPARATOR);

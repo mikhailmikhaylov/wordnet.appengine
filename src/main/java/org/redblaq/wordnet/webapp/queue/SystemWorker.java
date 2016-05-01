@@ -14,6 +14,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * System worker, which si used to perform one-time system operations.
+ */
 public class SystemWorker extends HttpServlet {
 
     public static final String URL = "/worker/system";
@@ -30,6 +33,9 @@ public class SystemWorker extends HttpServlet {
                     .put(StoreBaseWordsChunk.class.getSimpleName(), new StoreBaseWordsChunk())
                     .build();
 
+    /**
+     * Stores a chunk of base words into datastore.
+     */
     public static class StoreBaseWordsChunk implements Function<HttpServletRequest, Void> {
 
         @Override

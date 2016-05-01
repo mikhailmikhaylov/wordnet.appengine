@@ -15,6 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * Worker, which splits input into chunks and ssends them for processing to other workers.
+ */
 public class Worker extends HttpServlet {
     public static final String URL = "/worker";
 

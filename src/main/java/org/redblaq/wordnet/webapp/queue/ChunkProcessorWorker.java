@@ -5,6 +5,7 @@ import org.codehaus.jackson.map.ObjectReader;
 import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.dto.ResponseDto;
+import org.redblaq.wordnet.domain.services.ProcessorService;
 import org.redblaq.wordnet.webapp.services.CacheService;
 import org.redblaq.wordnet.webapp.services.ServiceProvider;
 import org.redblaq.wordnet.webapp.util.Arguments;
@@ -19,11 +20,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.List;
 
+/**
+ * Worker, which performs processing of data chunk.
+ * <p>After processing it tries to collect the whole task result.
+ */
 public class ChunkProcessorWorker extends HttpServlet {
 
     /* package */ static final String URL = "/worker/chunk";
     private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
-    private final Logger log = LoggerFactory.getLogger(ChunkProcessorWorker.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -35,8 +39,8 @@ public class ChunkProcessorWorker extends HttpServlet {
 
         cacheService.store(subtaskId, Responses.IN_PROGRESS.getText());
 
-        final List<TextEntry> textEntries = ServiceProvider.INSTANCE
-                .obtainProcessorService().process(argument, chunkOffset);
+        final List<TextEntry> textEntries = ServiceProvider.obtainService(ProcessorService.class)
+                .process(argument, chunkOffset);
 
         final ResponseDto result = ResponseDto.of(textEntries);
 
@@ -48,6 +52,12 @@ public class ChunkProcessorWorker extends HttpServlet {
         collectResult(taskId);
     }
 
+    /**
+     * Tries collecting task result.
+     * <p>If all the sub-tasks have valid output, we can collect their data and
+     * merge it into a single output.
+     * @param taskId root task id
+     */
     private void collectResult(String taskId) {
         final String subtasksId = Worker.getSubTasksId(taskId);
         final String joinedSubtasks = cacheService.retrieve(subtasksId);
@@ -61,8 +71,6 @@ public class ChunkProcessorWorker extends HttpServlet {
             final String subtaskId = subtaskIds[i];
             final String subtaskResult = cacheService.retrieve(subtaskId);
             subtaskResults[i] = subtaskResult;
-
-            logI(subtaskResult);
 
             shouldCollectResult = !isTaskInProgress(subtaskResult);
             if (!shouldCollectResult) {
@@ -81,11 +89,13 @@ public class ChunkProcessorWorker extends HttpServlet {
 
             cacheService.store(taskId, jsonResult);
         } catch (IOException e) {
-            logE(e);
             cacheService.store(taskId, Responses.ERROR.getText());
         }
     }
 
+    /**
+     * Merges sub-task results into a single ResponseDto.
+     */
     private ResponseDto readResults(String[] results) throws IOException {
         final ObjectReader reader = new ObjectMapper().reader(ResponseDto.class);
         final ResponseDto[] responses = new ResponseDto[results.length];
@@ -95,14 +105,6 @@ public class ChunkProcessorWorker extends HttpServlet {
             responses[i] = response;
         }
         return ResponseDto.merge(responses);
-    }
-
-    private void logI(String message) {
-        log.info(message);
-    }
-
-    private void logE(Throwable e) {
-        log.error(e.getMessage());
     }
 
     private boolean isTaskInProgress(String subTaskResult) {

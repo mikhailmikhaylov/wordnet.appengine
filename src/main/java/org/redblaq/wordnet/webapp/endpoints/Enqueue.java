@@ -17,6 +17,11 @@ import java.util.UUID;
 import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
 
 // https://cloud.google.com/appengine/docs/java/taskqueue/overview-push
+
+/**
+ * Push queue endpoint.
+ * <p>Enqueues basic worker task.
+ */
 public class Enqueue extends HttpServlet {
 
     @Override
