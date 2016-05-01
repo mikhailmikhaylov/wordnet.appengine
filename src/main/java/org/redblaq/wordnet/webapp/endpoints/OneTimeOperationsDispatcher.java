@@ -10,12 +10,15 @@ import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.webapp.queue.SystemWorker;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Arrays;
 
-public class OneTimeOperationsDispatcher extends BaseHttpServlet {
+import static org.redblaq.wordnet.webapp.ServletHelper.respondRaw;
+
+public class OneTimeOperationsDispatcher extends HttpServlet {
 
     public static final String OPERATION_ARG = "operation";
 
