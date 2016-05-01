@@ -8,7 +8,11 @@ import java.util.UUID;
  */
 @SuppressWarnings("UtilityClass")
 public class InputUtil {
+    /**
+     * Common separation sequence.
+     */
     public static final String WORDS_SEPARATOR = " ";
+    // Word processor chunk size. The number of words to be processed as a single task.
     private static final int PROCESSOR_CHUNK_SIZE = 300;
 
     private InputUtil() {
@@ -16,6 +20,7 @@ public class InputUtil {
 
     /**
      * Prepares input parts for processing chunks.
+     * <p>Input part includes all the words fro a single chunk.
      */
     public static String[] splitIntoParts(String input) {
         final String[] words = split(input);
@@ -44,14 +49,24 @@ public class InputUtil {
         return result;
     }
 
+    /**
+     * Splits input using common input separator.
+     */
     public static String[] split(String input) {
         return input.split(WORDS_SEPARATOR);
     }
 
+    /**
+     * Joins String array into a string using common input separator.
+     */
     public static String join(String[] stringArray) {
         return join(stringArray, WORDS_SEPARATOR);
     }
 
+    /**
+     * Joint String array.
+     * <p>Uses StringBuilder. Consider using Strings.join after migrating to Java 8.
+     */
     public static String join(String[] stringArray, String delimiter) {
         final StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < stringArray.length - 1; i++) {
@@ -61,6 +76,10 @@ public class InputUtil {
         return stringBuilder.toString();
     }
 
+    /**
+     * Prepares an array of UUIDs.
+     * @param count number of required UUIDs
+     */
     public static String[] prepareIds(int count) {
         final String[] result = new String[count];
         for (int i = 0; i < count; i++) {
