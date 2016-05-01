@@ -10,6 +10,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
+/**
+ * Service, which provides an access to common words operations.
+ */
 public class WordService {
 
     private final WordNetDatabase database;
@@ -18,6 +21,13 @@ public class WordService {
         database = WordNetDatabase.getFileInstance();
     }
 
+    /**
+     * Builds {@link Word} entity from a String.
+     * <p>Retrieves base form candidates for each word.
+     *
+     * @param word String form to search a word in WordNet
+     * @return built entity
+     */
     @SuppressWarnings("WeakerAccess") // API
     public Word buildWord(String word) {
         if (word == null || word.isEmpty() || word.equals(" ")) {
@@ -36,6 +46,13 @@ public class WordService {
         return knownWord;
     }
 
+    /**
+     * Converts raw String input into {@link TextEntry} entities.
+     * <p>Duplicates are saved within the same {@link TextEntry}.
+     *
+     * @param rawInput input to process, words are delimited with spaces
+     * @return List of entries
+     */
     @SuppressWarnings("WeakerAccess") // API
     public List<TextEntry> convertRawInput(String rawInput) {
         // Built words cache (input duplicates)
@@ -67,6 +84,9 @@ public class WordService {
         return orderedEntries;
     }
 
+    /**
+     * Retrieves base form candidates from WordNet database.
+     */
     private List<String> getBaseFormCandidates(String word) {
         final List<String> baseFormCandidates = new ArrayList<>();
         final Synset[] synsets = database.getSynsets(word);
@@ -78,15 +98,22 @@ public class WordService {
         return baseFormCandidates;
     }
 
+    /**
+     * Returns the part of a word till an apostrophe.
+     * <p>If there is no apostrophe in this word, returns hte word itself
+     */
     private String truncateApostrophe(String word) {
         if (!word.contains("'")) {
             return word;
         }
         int index = word.indexOf("'");
-        log.info(word + " --- " + word.substring(0, index));
         return word.substring(0, index);
     }
 
+    /**
+     * Removes inappropriate characters from a raw word.
+     * <p>Inappropriate characters are: dot, comma, !, ?, -, ?, double quote and line end.
+     */
     private String simplifyRawWord(String rawWord) {
         return rawWord.toLowerCase()
                 .replace(".", "")
@@ -97,6 +124,4 @@ public class WordService {
                 .replace("\"", "")
                 .replace("\n", "");
     }
-
-    private final Logger log = LoggerFactory.getLogger(WordService.class);
 }

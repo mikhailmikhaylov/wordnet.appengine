@@ -1,13 +1,20 @@
 package org.redblaq.wordnet.domain;
 
 /**
- * A store for base 3k words. Does not learn, just has them saved as a String. Is used
+ * A store for base 3k words.
+ * <p>Does not learn, just has them saved as a String. Is used by
+ * {@link org.redblaq.wordnet.webapp.endpoints.OneTimeOperationsDispatcher} to cache appropriate
+ * word forms into datastore.
  */
 @SuppressWarnings("UtilityClass")
 public class BaseWordsStore {
 
-    private BaseWordsStore() {}
+    private BaseWordsStore() {
+    }
 
+    /**
+     * Retrieves base input as a raw string.
+     */
     public static String getRaw() {
         return VALUE;
     }

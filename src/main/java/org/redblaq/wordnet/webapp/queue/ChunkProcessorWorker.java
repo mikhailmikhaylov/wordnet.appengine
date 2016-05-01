@@ -37,7 +37,7 @@ public class ChunkProcessorWorker extends HttpServlet {
         cacheService.store(subtaskId, Worker.TASK_IN_PROGRESS);
 
         final List<TextEntry> textEntries = ServiceProvider.INSTANCE
-                .obtainProcessorService().processText(argument, chunkOffset);
+                .obtainProcessorService().process(argument, chunkOffset);
 
         final ResponseDto result = ResponseDto.of(textEntries);
 

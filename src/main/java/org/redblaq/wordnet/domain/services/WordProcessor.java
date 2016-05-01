@@ -2,14 +2,16 @@ package org.redblaq.wordnet.domain.services;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.Word;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
 import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
 
-// TODO refactor
+// TODO:SEVERE:mikhail.mikhaylov: Refactoring needed.
+/**
+ * Word Processor itself.
+ * <p>Performs input processing for the whole text or a single chunk.
+ */
 /* package */ class WordProcessor {
 
     private final String input;
@@ -21,7 +23,7 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
 
     private Set<String> knownForms = new HashSet<>();
 
-    WordProcessor(String input, int offset) {
+    /* package */ WordProcessor(String input, int offset) {
         this.input = input;
         this.offset = offset;
         wordService = obtainService(WordService.class);
@@ -31,15 +33,7 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
         processTextInput();
     }
 
-    List<String> obtainUniqueWords() {
-        final List<String> uniqueWords = new ArrayList<>(unknownTextWords.size());
-        for (TextEntry word : unknownTextWords) {
-            uniqueWords.add(word.getWord().getBaseWord());
-        }
-        return uniqueWords;
-    }
-
-    List<TextEntry> obtainUniqueEntries() {
+    /* package */ List<TextEntry> obtainUniqueEntries() {
         final List<TextEntry> result = new ArrayList<>();
         for (TextEntry entry : unknownTextWords) {
             result.add(entry);
@@ -91,6 +85,4 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
     private List<TextEntry> convertInput(String input) {
         return wordService.convertRawInput(input);
     }
-
-    private final Logger log = LoggerFactory.getLogger(WordProcessor.class);
 }

@@ -1,7 +1,6 @@
 package org.redblaq.wordnet.domain.entities.dto;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
-import org.redblaq.wordnet.domain.entities.Word;
 
 import java.util.ArrayList;
 import java.util.HashMap;
