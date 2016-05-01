@@ -1,9 +1,12 @@
 package org.redblaq.wordnet.domain.entities.dto;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
+import org.redblaq.wordnet.domain.entities.Word;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SuppressWarnings("WeakerAccess")
 public class ResponseDto {
@@ -15,6 +18,27 @@ public class ResponseDto {
 
     public List<WordDto> getUnknownWords() {
         return unknownWords;
+    }
+
+    public static ResponseDto merge(ResponseDto[] args) {
+        final Map<String, WordDto> resultWords = new HashMap<>();
+        final List<WordDto> resultWordsSorted = new ArrayList<>();
+        for (ResponseDto arg : args) {
+            for (WordDto word : arg.unknownWords) {
+                final String baseForm = word.getBaseForm();
+                WordDto resultWord = resultWords.get(baseForm);
+                if (resultWord == null) {
+                    resultWord = new WordDto(baseForm);
+                    resultWords.put(baseForm, resultWord);
+                    resultWordsSorted.add(resultWord);
+                }
+                resultWord.getMatchingWords().addAll(word.getMatchingWords());
+            }
+        }
+
+        final ResponseDto result = new ResponseDto();
+        result.unknownWords.addAll(resultWordsSorted);
+        return result;
     }
 
     public static ResponseDto of(List<TextEntry> textEntries) {
@@ -31,8 +55,15 @@ public class ResponseDto {
     }
 
     public static class WordDto {
-        private final String baseForm;
-        private final List<TextEntryDto> matchingWords = new ArrayList<>();
+        private String baseForm;
+        private List<TextEntryDto> matchingWords = new ArrayList<>();
+
+        private WordDto() {
+        }
+
+        private WordDto(String baseForm) {
+            this(baseForm, new ArrayList<TextEntryDto>());
+        }
 
         private WordDto(String baseForm, List<TextEntryDto> matchingWords) {
             this.baseForm = baseForm;
@@ -49,8 +80,11 @@ public class ResponseDto {
     }
 
     public static class TextEntryDto {
-        private final String word;
-        private final int position;
+        private String word;
+        private int position;
+
+        private TextEntryDto() {
+        }
 
         private TextEntryDto(String word, int position) {
             this.word = word;

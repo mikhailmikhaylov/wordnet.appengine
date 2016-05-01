@@ -24,7 +24,7 @@ public class TextEntry {
     }
 
     public static class Entry {
-        private final int startPosition;
+        private int startPosition;
         private final String form;
 
         public Entry(int startPosition, String form) {
@@ -38,6 +38,10 @@ public class TextEntry {
 
         public String getForm() {
             return form;
+        }
+
+        public void mutateStartPositionRelative(int value) {
+            startPosition += value;
         }
     }
 }

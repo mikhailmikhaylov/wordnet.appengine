@@ -6,7 +6,7 @@ import com.google.appengine.api.taskqueue.TaskOptions;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import org.redblaq.wordnet.domain.BaseWordsStore;
-import org.redblaq.wordnet.domain.InputRules;
+import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.webapp.queue.SystemWorker;
 
 import javax.servlet.ServletException;
@@ -43,7 +43,7 @@ public class OneTimeOperationsDispatcher extends BaseHttpServlet {
         @Override
         public String apply(HttpServletRequest ignored) {
             final String baseWordsRaw = BaseWordsStore.getRaw();
-            final String[] wordsRaw = baseWordsRaw.split(InputRules.WORDS_SEPARATOR);
+            final String[] wordsRaw = baseWordsRaw.split(InputUtil.WORDS_SEPARATOR);
 
             final int baseWordsLength = wordsRaw.length;
             final int fullChunksQuantity = baseWordsLength / CHUNK_SIZE;
@@ -57,8 +57,7 @@ public class OneTimeOperationsDispatcher extends BaseHttpServlet {
             }
             if (lastChunkSize > 0) {
                 final int from = baseWordsLength - lastChunkSize;
-                final int to = baseWordsLength - 1;
-                final String[] chunk = Arrays.copyOfRange(wordsRaw, from, to);
+                final String[] chunk = Arrays.copyOfRange(wordsRaw, from, baseWordsLength);
                 enqueueChunkWrite(chunk);
             }
 
@@ -67,20 +66,11 @@ public class OneTimeOperationsDispatcher extends BaseHttpServlet {
 
         private void enqueueChunkWrite(String[] wordsRawChunk) {
             final Queue queue = QueueFactory.getDefaultQueue();
-            final String argumentValue = join(wordsRawChunk, InputRules.WORDS_SEPARATOR);
+            final String argumentValue = InputUtil.join(wordsRawChunk, InputUtil.WORDS_SEPARATOR);
             queue.add(TaskOptions.Builder
                     .withUrl("/systemworker")
                     .param(OPERATION_ARG, SystemWorker.StoreBaseWordsChunk.class.getSimpleName())
                     .param(SystemWorker.VALUE_ARG, argumentValue));
-        }
-
-        private String join(String[] stringArray, String delimiter) {
-            final StringBuilder stringBuilder = new StringBuilder();
-            for (int i = 0; i < stringArray.length - 1; i++) {
-                stringBuilder.append(stringArray[i]).append(delimiter);
-            }
-            stringBuilder.append(stringArray[stringArray.length - 1]);
-            return stringBuilder.toString();
         }
     }
 }

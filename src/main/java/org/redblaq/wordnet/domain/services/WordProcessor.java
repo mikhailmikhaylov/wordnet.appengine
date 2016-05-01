@@ -13,6 +13,7 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
 /* package */ class WordProcessor {
 
     private final String input;
+    private final int offset;
 
     private final WordService wordService;
     private List<TextEntry> inputWords;
@@ -20,8 +21,9 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
 
     private Set<String> knownForms = new HashSet<>();
 
-    WordProcessor(String input) {
+    WordProcessor(String input, int offset) {
         this.input = input;
+        this.offset = offset;
         wordService = obtainService(WordService.class);
 
         prepareBaseWords();
@@ -42,7 +44,16 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
         for (TextEntry entry : unknownTextWords) {
             result.add(entry);
         }
+        translateOffset(result, offset);
         return result;
+    }
+
+    private static void translateOffset(List<TextEntry> entries, int offset) {
+        for (TextEntry textEntry : entries) {
+            for (TextEntry.Entry entry : textEntry.getEntries()) {
+                entry.mutateStartPositionRelative(offset);
+            }
+        }
     }
 
     private void processTextInput() {

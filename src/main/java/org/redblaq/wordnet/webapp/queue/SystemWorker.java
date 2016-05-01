@@ -2,10 +2,9 @@ package org.redblaq.wordnet.webapp.queue;
 
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
-import org.redblaq.wordnet.domain.InputRules;
+import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.domain.services.OfyService;
 import org.redblaq.wordnet.webapp.endpoints.OneTimeOperationsDispatcher;
-import org.redblaq.wordnet.domain.BaseWordsStore;
 import org.redblaq.wordnet.domain.entities.Word;
 
 import javax.servlet.ServletException;
@@ -35,7 +34,7 @@ public class SystemWorker extends HttpServlet {
         @Override
         public Void apply(HttpServletRequest request) {
             final String input = request.getParameter(VALUE_ARG);
-            final String[] wordsRaw = input.split(InputRules.WORDS_SEPARATOR);
+            final String[] wordsRaw = input.split(InputUtil.WORDS_SEPARATOR);
 
             for (String wordRaw : wordsRaw) {
                 final Word word = new Word(wordRaw);

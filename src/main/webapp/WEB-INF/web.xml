@@ -12,6 +12,10 @@
         <servlet-class>org.redblaq.wordnet.webapp.queue.Worker</servlet-class>
     </servlet>
     <servlet>
+        <servlet-name>ChunkWorker</servlet-name>
+        <servlet-class>org.redblaq.wordnet.webapp.queue.ChunkProcessorWorker</servlet-class>
+    </servlet>
+    <servlet>
         <servlet-name>SystemWorker</servlet-name>
         <servlet-class>org.redblaq.wordnet.webapp.queue.SystemWorker</servlet-class>
     </servlet>
@@ -30,6 +34,10 @@
     <servlet-mapping>
         <servlet-name>Worker</servlet-name>
         <url-pattern>/worker</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ChunkWorker</servlet-name>
+        <url-pattern>/worker/chunk</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SystemWorker</servlet-name>

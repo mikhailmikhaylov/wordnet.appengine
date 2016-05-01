@@ -2,7 +2,7 @@ package org.redblaq.wordnet.domain.services;
 
 import edu.smu.tspell.wordnet.Synset;
 import edu.smu.tspell.wordnet.WordNetDatabase;
-import org.redblaq.wordnet.domain.InputRules;
+import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.Word;
 import org.slf4j.Logger;
@@ -44,7 +44,7 @@ public class WordService {
         final Map<Word, TextEntry> entries = new HashMap<>();
         // Ready to ship
         final List<TextEntry> orderedEntries = new ArrayList<>();
-        final String[] splitInput = rawInput.split(InputRules.WORDS_SEPARATOR);
+        final String[] splitInput = rawInput.split(InputUtil.WORDS_SEPARATOR);
         int currentWordPosition = 0;
         for (String rawWord : splitInput) {
             final String simplifiedRawWord = simplifyRawWord(rawWord);
@@ -62,7 +62,7 @@ public class WordService {
                 }
                 entry.addEntry(currentWordPosition, rawWord);
             }
-            currentWordPosition += rawWord.length() + InputRules.WORDS_SEPARATOR.length();
+            currentWordPosition += rawWord.length() + InputUtil.WORDS_SEPARATOR.length();
         }
         return orderedEntries;
     }

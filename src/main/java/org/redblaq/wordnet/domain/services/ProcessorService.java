@@ -9,12 +9,13 @@ public class ProcessorService {
 
     private static final String OUTPUT_SEPARATOR = "\n";
 
+    // TODO remove
     public String process(String input) {
-        final List<String> words = new WordProcessor(input).obtainUniqueWords();
+        final List<String> words = new WordProcessor(input, 0).obtainUniqueWords();
         return Joiner.on(OUTPUT_SEPARATOR).join(words);
     }
 
-    public List<TextEntry> processText(String input) {
-        return new WordProcessor(input).obtainUniqueEntries();
+    public List<TextEntry> processText(String input, int chunkOffset) {
+        return new WordProcessor(input, chunkOffset).obtainUniqueEntries();
     }
 }
