@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Highlighting</title>
     <link rel="stylesheet" type="text/css" href="css/main.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlighting.css" />
 </head>
 <body>
 <div>
@@ -12,7 +13,7 @@
         <h4>Text</h4>
         <textarea class="js-original-text text-large" disabled></textarea>
     </div>    
-    <input type="button" value="Process Text" />
+    <input type="button" class="js-process-text-button" value="Process Text" />
 </div>
  <div class="js-processing-results">
      <div class="column">
@@ -26,6 +27,7 @@
         </select>
     </div>
  </div>
- <script type="javascript" src="bower_components/jquery/dist/jquery.min.js" />
+ <script src="bower_components/jquery/dist/jquery.min.js"></script>
+ <script src="js/highlighting.js"></script>
 </body>
 </html>

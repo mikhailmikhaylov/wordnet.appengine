@@ -1,15 +1,15 @@
 {
-	unknownWords: [
+	"unknownWords": [
 		{ 
-			baseForm: "lorem", 
-			matchingWords:  [ 
-				{ word: "Lorem", position: 0 } 
+			"baseForm": "lorem", 
+			"matchingWords":  [ 
+				{ "word": "Lorem", "position": 0 } 
 			]
 		},	
 		{
-			baseForm: "exercitate",
-			matchingWords: [ 
-				{ word: "exercitation", position: 163 } 
+			"baseForm": "exercitate",
+			"matchingWords": [ 
+				{ "word": "exercitation", "position": 162 } 
 			]
 		}
 	]
