@@ -39,10 +39,22 @@ public class ChannelService {
         channelService.sendMessage(new ChannelMessage(channelId, message));
     }
 
+    /**
+     * Registers a task. Registered task's channelId can be retrieved later.
+     *
+     * @param taskId    task's id
+     * @param channelId task's channel id
+     */
     public void registerTask(String taskId, String channelId) {
-        taskChannels.put(channelId, taskId);
+        taskChannels.put(taskId, channelId);
     }
 
+    /**
+     * Retrieves registered task's channel id
+     *
+     * @param taskId task's id
+     * @return null if nothing is found
+     */
     public String getTaskChannel(String taskId) {
         return taskChannels.get(taskId);
     }

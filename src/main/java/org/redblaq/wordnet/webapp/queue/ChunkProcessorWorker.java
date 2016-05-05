@@ -83,8 +83,11 @@ public class ChunkProcessorWorker extends HttpServlet {
         }
 
         if (!shouldCollectResult) {
+            log.info("--- Should NOT collect");
             return;
         }
+
+        log.info("--- Should collect");
 
         try {
             final ResponseDto responseDto = readResults(subtaskResults);
@@ -120,8 +123,11 @@ public class ChunkProcessorWorker extends HttpServlet {
      * Responds to an appropriate channel.
      */
     private void respondToChannel(String taskId, ResponseDto response) {
+        log.info("--- Responding to channel");
+
         final String channelId = channelService.getTaskChannel(taskId);
         if (channelId == null || channelId.isEmpty()) {
+            log.info("--- Channel Error");
             return;
         }
         try {
@@ -129,9 +135,13 @@ public class ChunkProcessorWorker extends HttpServlet {
             final ObjectMapper mapper = new ObjectMapper();
             final String jsonResult = mapper.writeValueAsString(message);
 
+            log.info(jsonResult);
+
             channelService.sendMessage(channelId, jsonResult);
         } catch (IOException e) {
             channelService.sendMessage(channelId, Responses.ERROR.getText());
         }
     }
+
+    private Logger log = LoggerFactory.getLogger(ChunkProcessorWorker.class);
 }

@@ -19,7 +19,7 @@ public class SubscriberEndpoint extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         final String clientId = UUID.randomUUID().toString();
 
-        channelService.openChannel(clientId);
-        ServletHelper.respondRaw(resp, clientId);
+        final String channelId = channelService.openChannel(clientId);
+        ServletHelper.respondRaw(resp, channelId);
     }
 }

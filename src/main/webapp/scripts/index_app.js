@@ -5,7 +5,7 @@ requirejs.config({
     }
 });
 
-requirejs(['jquery'], function($) {
+requirejs(['jquery', '/_ah/channel/jsapi'], function($, channels) {
     console.info('Module loaded');
     var state = {};
 
@@ -16,10 +16,30 @@ requirejs(['jquery'], function($) {
         }).done(function(data) {
             state.clientId = data;
             console.info('Bound to service as ' + state.clientId);
+            connect(state.clientId);
         }).fail(function() {
             console.error('Could not bind to service.');
         });
     };
+
+    function connect(token) {
+        var channel = new goog.appengine.Channel(token);
+
+        var socket = channel.open();
+
+        socket.onopen = function() {
+            console.log("Channel opened");
+        };
+        socket.onmessage = function (data) {
+            console.log("Message received: {}.", data);
+        };
+        socket.onerror = function() {
+            console.log("Channel errored");
+        };
+        socket.onclose = function() {
+            console.log("Channel closed");
+        };
+    }
 
     bindService(state);
 
@@ -38,10 +58,10 @@ requirejs(['jquery'], function($) {
                 url: '/enqueue',
                 data: 'argument=' + arg + '&channel-id=' + state.clientId
             }).done(function(data) {
-                console.info('Data processing returned result');
+                console.info('Task scheduled: ' + data);
                 $('#result').val(data);
             }).fail(function() {
-                console.error('Error processing data');
+                console.error('Error scheduling task');
             });
 
             e.stopPropagation();
