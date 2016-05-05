@@ -11,7 +11,8 @@ public enum Arguments {
     ARGUMENT,
     TASK_ID,
     CHUNK_TASK_ID,
-    CHUNK_OFFSET;
+    CHUNK_OFFSET,
+    CHANNEL_ID;
 
     @Override
     public String toString() {

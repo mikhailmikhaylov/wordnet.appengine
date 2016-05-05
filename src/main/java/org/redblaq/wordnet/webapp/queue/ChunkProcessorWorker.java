@@ -5,8 +5,10 @@ import org.codehaus.jackson.map.ObjectReader;
 import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.dto.ResponseDto;
+import org.redblaq.wordnet.domain.entities.dto.TaskResponseDto;
 import org.redblaq.wordnet.domain.services.ProcessorService;
 import org.redblaq.wordnet.webapp.services.CacheService;
+import org.redblaq.wordnet.webapp.services.ChannelService;
 import org.redblaq.wordnet.webapp.services.ServiceProvider;
 import org.redblaq.wordnet.webapp.util.Arguments;
 import org.redblaq.wordnet.webapp.util.Responses;
@@ -28,6 +30,7 @@ public class ChunkProcessorWorker extends HttpServlet {
 
     /* package */ static final String URL = "/worker/chunk";
     private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
+    private final ChannelService channelService = ServiceProvider.INSTANCE.obtain(ChannelService.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -56,6 +59,7 @@ public class ChunkProcessorWorker extends HttpServlet {
      * Tries collecting task result.
      * <p>If all the sub-tasks have valid output, we can collect their data and
      * merge it into a single output.
+     *
      * @param taskId root task id
      */
     private void collectResult(String taskId) {
@@ -88,6 +92,7 @@ public class ChunkProcessorWorker extends HttpServlet {
             final String jsonResult = mapper.writeValueAsString(responseDto);
 
             cacheService.store(taskId, jsonResult);
+            respondToChannel(taskId, responseDto);
         } catch (IOException e) {
             cacheService.store(taskId, Responses.ERROR.getText());
         }
@@ -109,5 +114,24 @@ public class ChunkProcessorWorker extends HttpServlet {
 
     private boolean isTaskInProgress(String subTaskResult) {
         return Responses.IN_PROGRESS.getText().equals(subTaskResult);
+    }
+
+    /**
+     * Responds to an appropriate channel.
+     */
+    private void respondToChannel(String taskId, ResponseDto response) {
+        final String channelId = channelService.getTaskChannel(taskId);
+        if (channelId == null || channelId.isEmpty()) {
+            return;
+        }
+        try {
+            final TaskResponseDto message = new TaskResponseDto(taskId, response);
+            final ObjectMapper mapper = new ObjectMapper();
+            final String jsonResult = mapper.writeValueAsString(message);
+
+            channelService.sendMessage(channelId, jsonResult);
+        } catch (IOException e) {
+            channelService.sendMessage(channelId, Responses.ERROR.getText());
+        }
     }
 }

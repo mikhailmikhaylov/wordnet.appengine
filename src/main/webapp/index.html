@@ -3,27 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello and welcome to AppEngine Qarcass App</title>
+    <script data-main="scripts/index_app" src="scripts/require.js"></script>
+    <script src="/_ah/channel/jsapi"></script>
 </head>
 <body>
 <div>
-    <form action="/enqueue" method="post">
-        ENQUEUE<br>
-        Text:<br>
-        <input type="text" name="argument" value="abandon ability ABBLIWITY"><br>
-        <input type="submit" value="Submit">
-    </form>
-    <br><br>
-    <form action="/cache" method="post">
-        RESULTS<br>
-        Task Id:<br>
-        <input type="text" name="task-id" value=""><br>
-        <input type="submit" value="Submit">
-    </form>
-    <form action="/onetimeops" method="post">
-        PRECACHE DB<br>
-        <input type="hidden" name="operation" value="ProcessBaseWords"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <input type="text" id="argument" value="abandon ability ABBLIWITY"/><br>
+    <input type="text" id="result" readonly/><br>
+    <button id="submit_button">SUBMIT</button>
 </div>
 </body>
 </html>

@@ -22,6 +22,7 @@ public enum ServiceProvider {
                     .put(CacheService.class, new CacheService())
                     .put(WordService.class, new WordService())
                     .put(ProcessorService.class, new ProcessorService())
+                    .put(ChannelService.class, new ChannelService())
                     .build();
 
     /**

@@ -4,6 +4,8 @@ import com.google.appengine.api.taskqueue.Queue;
 import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import org.redblaq.wordnet.webapp.queue.Worker;
+import org.redblaq.wordnet.webapp.services.ChannelService;
+import org.redblaq.wordnet.webapp.services.ServiceProvider;
 import org.redblaq.wordnet.webapp.util.Arguments;
 
 import javax.servlet.ServletException;
@@ -24,13 +26,20 @@ import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
  */
 public class Enqueue extends HttpServlet {
 
+    private final ChannelService channelService = ServiceProvider.obtainService(ChannelService.class);
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         final String requestArgument = request.getParameter(Arguments.ARGUMENT.toString());
+        final String channelId = request.getParameter(Arguments.CHANNEL_ID.toString());
         validateArgument(requestArgument);
         final Queue queue = QueueFactory.getDefaultQueue();
 
         final String taskId = UUID.randomUUID().toString();
+
+        if (channelId != null && !channelId.isEmpty()) {
+            channelService.registerTask(taskId, channelId);
+        }
 
         queue.add(TaskOptions.Builder
                 .withUrl(Worker.URL)
