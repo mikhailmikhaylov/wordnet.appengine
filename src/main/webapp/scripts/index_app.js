@@ -9,33 +9,6 @@ requirejs(['jquery'], function($) {
     console.info('Module loaded');
     var state = {};
 
-    $("#submit_button").bind('click', function (e) {
-
-        console.info('Sending data...');
-
-        var arg = $('#argument').val();
-        if (state.clientId == undefined) {
-            console.error('Not bound yet');
-            return;
-        }
-
-        $.ajax({
-            type: 'POST',
-            url: '/enqueue',
-            data: 'argument=' + arg + '&channel-id=' + state.clientId
-        }).done(function(data) {
-            console.info('Data processing returned result');
-            $('#result').val(data);
-        }).fail(function() {
-            console.error('Error processing data');
-        });
-
-        e.stopPropagation();
-        e.preventDefault();
-
-        return false;
-    });
-
     var bindService = function(state) {
         $.ajax({
             type: 'POST',
