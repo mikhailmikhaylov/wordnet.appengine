@@ -20,6 +20,7 @@ var Highlighting = (function ($) {
 	
 	var attachEventHandlers = function () {
 		$processTextButton.click(processText);
+		$unknownWordsList.change(unknownWordSelected);
 	};
 	
 	var processText = function () {
@@ -35,15 +36,26 @@ var Highlighting = (function ($) {
 				var option = document.createElement('option');
 				option.value = word.baseForm;
 				option.text = word.baseForm;
-				option.onclick = function () {
-					var matchingWords = unknownWords[this.index].matchingWords;
-					
-					highlightWords(matchingWords);
-				};
 				
 				$unknownWordsList.append(option);
 			});		
 		});	
+	};
+	
+	var unknownWordSelected = function () {
+		var words = [];
+		
+		$.each(this.options, function (index, item) {
+			if (item.selected) {
+				var matchingWords = unknownWords[index].matchingWords;
+				
+				matchingWords.forEach(function (word) {
+					words.push(word);
+				});
+			}	
+		});
+		
+		highlightWords(words);
 	};
 	
 	var highlightWords = function (words) {
