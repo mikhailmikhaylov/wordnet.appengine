@@ -1,0 +1,10 @@
+.text-large {
+	width: 700px;
+	min-height: 300px;	
+}
+
+.column {
+	display: inline-block;
+	vertical-align: top;
+	margin: 3px;	
+}
