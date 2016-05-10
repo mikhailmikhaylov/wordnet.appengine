@@ -3,15 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <title>Hello and welcome to AppEngine Qarcass App</title>
+    <script data-main="scripts/index_app" src="scripts/require.js"></script>
+    <script src="/_ah/channel/jsapi"></script>
 </head>
 <body>
 <div>
-    <form action="/processor" method="post">
-        WordNet knows: "abandon ability able about door"<br>
-        Text:<br>
-        <input type="text" name="input" value="abandon ability ABBLIWITY"><br>
-        <input type="submit" value="Submit">
-    </form>
+    <input type="text" id="argument" value="abandon ability ABBLIWITY"/><br>
+    <input type="text" id="result" readonly/><br>
+    <button id="submit_button">SUBMIT</button>
 </div>
 </body>
 </html>
