@@ -1,6 +1,7 @@
 package org.redblaq.wordnet.domain.services;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
+import org.redblaq.wordnet.domain.processor.WordProcessor;
 
 import java.util.List;
 

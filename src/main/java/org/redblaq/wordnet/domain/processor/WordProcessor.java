@@ -1,7 +1,9 @@
-package org.redblaq.wordnet.domain.services;
+package org.redblaq.wordnet.domain.processor;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.Word;
+import org.redblaq.wordnet.domain.services.KnownWordsStore;
+import org.redblaq.wordnet.domain.services.WordService;
 import org.redblaq.wordnet.webapp.services.CompositionRoot;
 
 import java.util.*;
@@ -12,7 +14,7 @@ import java.util.*;
  * Word Processor itself.
  * <p>Performs input processing for the whole text or a single chunk.
  */
-/* package */ class WordProcessor {
+public class WordProcessor {
 
     private final String input;
     private final int offset;
@@ -24,7 +26,7 @@ import java.util.*;
 
     private Set<String> knownForms = new HashSet<>();
 
-    /* package */ WordProcessor(String input, int offset) {
+    public WordProcessor(String input, int offset) {
         this.input = input;
         this.offset = offset;
         wordService = CompositionRoot.INSTANCE.resolve(WordService.class);
@@ -35,7 +37,7 @@ import java.util.*;
         processTextInput();
     }
 
-    /* package */ List<TextEntry> obtainUniqueEntries() {
+    public List<TextEntry> obtainUniqueEntries() {
         final List<TextEntry> result = new ArrayList<>();
         for (TextEntry entry : unknownTextWords) {
             result.add(entry);
