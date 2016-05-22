@@ -7,6 +7,7 @@ import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import java.util.*;
 
 // TODO:SEVERE:mikhail.mikhaylov: Refactoring needed.
+
 /**
  * Word Processor itself.
  * <p>Performs input processing for the whole text or a single chunk.
@@ -17,6 +18,7 @@ import java.util.*;
     private final int offset;
 
     private final WordService wordService;
+    private final KnownWordsStore knownWordsStore;
     private List<TextEntry> inputWords;
     private List<TextEntry> unknownTextWords;
 
@@ -26,6 +28,7 @@ import java.util.*;
         this.input = input;
         this.offset = offset;
         wordService = CompositionRoot.INSTANCE.resolve(WordService.class);
+        knownWordsStore = CompositionRoot.INSTANCE.resolve(KnownWordsStore.class);
 
         prepareBaseWords();
         prepareInput();
@@ -73,7 +76,7 @@ import java.util.*;
     }
 
     private void prepareBaseWords() {
-        final List<Word> knownWords = OfyService.objectify().load().type(Word.class).list();
+        final List<Word> knownWords = knownWordsStore.getKnownWords();
 
         // Each of these words only has baseForm now
         for (Word knownWord : knownWords) {

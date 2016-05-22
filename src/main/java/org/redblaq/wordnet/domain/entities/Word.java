@@ -10,8 +10,7 @@ import java.util.List;
 @Entity
 public class Word {
 
-    // Mutability -> Objectify
-
+    // Id Mutability -> Objectify
     @Id
     private String baseWord;
     private final ArrayList<String> forms = new ArrayList<>();

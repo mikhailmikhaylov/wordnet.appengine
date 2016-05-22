@@ -3,9 +3,11 @@ package org.redblaq.wordnet.webapp.queue;
 import com.google.common.base.Function;
 import com.google.common.collect.ImmutableMap;
 import org.redblaq.wordnet.domain.InputUtil;
+import org.redblaq.wordnet.domain.services.KnownWordsStore;
 import org.redblaq.wordnet.domain.services.OfyService;
 import org.redblaq.wordnet.webapp.endpoints.OneTimeOperationsDispatcher;
 import org.redblaq.wordnet.domain.entities.Word;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.Arguments;
 
 import javax.servlet.ServletException;
@@ -45,9 +47,7 @@ public class SystemWorker extends HttpServlet {
 
             for (String wordRaw : wordsRaw) {
                 final Word word = new Word(wordRaw);
-                // No need to build forms, I suppose. Needs result comparison
-                // final Word word = ServiceProvider.obtainService(WordService.class).buildWord(wordRaw);
-                OfyService.objectify().save().entity(word).now();
+                CompositionRoot.INSTANCE.resolve(KnownWordsStore.class).saveWord(word);
             }
 
             return null;

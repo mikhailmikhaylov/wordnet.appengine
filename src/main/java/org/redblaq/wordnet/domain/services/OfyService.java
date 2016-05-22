@@ -15,6 +15,7 @@ public class OfyService {
         ObjectifyService.factory().register(Word.class);
     }
 
+    @SuppressWarnings("WeakerAccess") // API
     public static Objectify objectify() {
         return ObjectifyService.ofy();
     }
