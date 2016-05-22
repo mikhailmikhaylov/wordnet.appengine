@@ -9,7 +9,7 @@ import org.redblaq.wordnet.domain.entities.dto.TaskResponseDto;
 import org.redblaq.wordnet.domain.services.ProcessorService;
 import org.redblaq.wordnet.webapp.services.CacheService;
 import org.redblaq.wordnet.webapp.services.ChannelService;
-import org.redblaq.wordnet.webapp.services.ServiceProvider;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.Arguments;
 import org.redblaq.wordnet.webapp.util.Responses;
 import org.slf4j.Logger;
@@ -29,8 +29,8 @@ import java.util.List;
 public class ChunkProcessorWorker extends HttpServlet {
 
     /* package */ static final String URL = "/worker/chunk";
-    private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
-    private final ChannelService channelService = ServiceProvider.INSTANCE.obtain(ChannelService.class);
+    private final CacheService cacheService = CompositionRoot.INSTANCE.resolve(CacheService.class);
+    private final ChannelService channelService = CompositionRoot.INSTANCE.resolve(ChannelService.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)
@@ -42,7 +42,7 @@ public class ChunkProcessorWorker extends HttpServlet {
 
         cacheService.store(subtaskId, Responses.IN_PROGRESS.getText());
 
-        final List<TextEntry> textEntries = ServiceProvider.obtainService(ProcessorService.class)
+        final List<TextEntry> textEntries = CompositionRoot.INSTANCE.resolve(ProcessorService.class)
                 .process(argument, chunkOffset);
 
         final ResponseDto result = ResponseDto.of(textEntries);

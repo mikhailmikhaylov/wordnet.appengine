@@ -1,7 +1,7 @@
 package org.redblaq.wordnet.webapp.endpoints;
 
 import org.redblaq.wordnet.webapp.services.ChannelService;
-import org.redblaq.wordnet.webapp.services.ServiceProvider;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.ServletHelper;
 
 import javax.servlet.ServletException;
@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class SubscriberEndpoint extends HttpServlet {
 
-    private ChannelService channelService = ServiceProvider.obtainService(ChannelService.class);
+    private ChannelService channelService = CompositionRoot.INSTANCE.resolve(ChannelService.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

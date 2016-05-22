@@ -5,7 +5,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import org.redblaq.wordnet.webapp.queue.Worker;
 import org.redblaq.wordnet.webapp.services.ChannelService;
-import org.redblaq.wordnet.webapp.services.ServiceProvider;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.Arguments;
 
 import javax.servlet.ServletException;
@@ -26,7 +26,7 @@ import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
  */
 public class EnqueueEndpoint extends HttpServlet {
 
-    private final ChannelService channelService = ServiceProvider.obtainService(ChannelService.class);
+    private final ChannelService channelService = CompositionRoot.INSTANCE.resolve(ChannelService.class);
 
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

@@ -1,10 +1,10 @@
 package org.redblaq.wordnet.webapp.endpoints;
 
 import com.google.appengine.repackaged.com.google.api.client.util.Strings;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.Arguments;
 import org.redblaq.wordnet.webapp.util.Responses;
 import org.redblaq.wordnet.webapp.util.ServletHelper;
-import org.redblaq.wordnet.webapp.services.ServiceProvider;
 import org.redblaq.wordnet.webapp.services.CacheService;
 
 import javax.servlet.ServletException;
@@ -19,7 +19,7 @@ import java.io.IOException;
  */
 public class CacheReaderEndpoint extends HttpServlet {
 
-    private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
+    private final CacheService cacheService = CompositionRoot.INSTANCE.resolve(CacheService.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp)

@@ -5,7 +5,7 @@ import com.google.appengine.api.taskqueue.QueueFactory;
 import com.google.appengine.api.taskqueue.TaskOptions;
 import org.redblaq.wordnet.domain.InputUtil;
 import org.redblaq.wordnet.webapp.services.CacheService;
-import org.redblaq.wordnet.webapp.services.ServiceProvider;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 import org.redblaq.wordnet.webapp.util.Arguments;
 import org.redblaq.wordnet.webapp.util.Responses;
 
@@ -21,7 +21,7 @@ import java.io.IOException;
 public class Worker extends HttpServlet {
     public static final String URL = "/worker";
 
-    private final CacheService cacheService = ServiceProvider.INSTANCE.obtain(CacheService.class);
+    private final CacheService cacheService = CompositionRoot.INSTANCE.resolve(CacheService.class);
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

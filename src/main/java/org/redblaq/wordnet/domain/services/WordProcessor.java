@@ -2,10 +2,9 @@ package org.redblaq.wordnet.domain.services;
 
 import org.redblaq.wordnet.domain.entities.TextEntry;
 import org.redblaq.wordnet.domain.entities.Word;
+import org.redblaq.wordnet.webapp.services.CompositionRoot;
 
 import java.util.*;
-
-import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
 
 // TODO:SEVERE:mikhail.mikhaylov: Refactoring needed.
 /**
@@ -26,7 +25,7 @@ import static org.redblaq.wordnet.webapp.services.ServiceProvider.obtainService;
     /* package */ WordProcessor(String input, int offset) {
         this.input = input;
         this.offset = offset;
-        wordService = obtainService(WordService.class);
+        wordService = CompositionRoot.INSTANCE.resolve(WordService.class);
 
         prepareBaseWords();
         prepareInput();
