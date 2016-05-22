@@ -15,6 +15,7 @@ public class ResponseDto {
     private ResponseDto() {
     }
 
+    @SuppressWarnings("unused") // Getter
     public List<WordDto> getUnknownWords() {
         return unknownWords;
     }
@@ -51,51 +52,5 @@ public class ResponseDto {
             result.unknownWords.add(word);
         }
         return result;
-    }
-
-    public static class WordDto {
-        private String baseForm;
-        private List<TextEntryDto> matchingWords = new ArrayList<>();
-
-        private WordDto() {
-        }
-
-        private WordDto(String baseForm) {
-            this(baseForm, new ArrayList<TextEntryDto>());
-        }
-
-        private WordDto(String baseForm, List<TextEntryDto> matchingWords) {
-            this.baseForm = baseForm;
-            this.matchingWords.addAll(matchingWords);
-        }
-
-        public String getBaseForm() {
-            return baseForm;
-        }
-
-        public List<TextEntryDto> getMatchingWords() {
-            return matchingWords;
-        }
-    }
-
-    public static class TextEntryDto {
-        private String word;
-        private int position;
-
-        private TextEntryDto() {
-        }
-
-        private TextEntryDto(String word, int position) {
-            this.word = word;
-            this.position = position;
-        }
-
-        public String getWord() {
-            return word;
-        }
-
-        public int getPosition() {
-            return position;
-        }
     }
 }

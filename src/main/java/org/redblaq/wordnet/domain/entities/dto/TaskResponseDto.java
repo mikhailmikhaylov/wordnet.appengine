@@ -5,6 +5,7 @@ public class TaskResponseDto {
     private String taskId;
     private ResponseDto response;
 
+    @SuppressWarnings("unused") // Explicitly defined for Jackson
     private TaskResponseDto() {
     }
 
@@ -13,6 +14,7 @@ public class TaskResponseDto {
         this.response = response;
     }
 
+    @SuppressWarnings("unused") // Getter
     public String getTaskId() {
         return taskId;
     }
