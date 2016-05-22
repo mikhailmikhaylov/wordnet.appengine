@@ -24,7 +24,7 @@ import static org.redblaq.wordnet.webapp.util.ServletHelper.respondRaw;
  * Push queue endpoint.
  * <p>Enqueues basic worker task.
  */
-public class Enqueue extends HttpServlet {
+public class EnqueueEndpoint extends HttpServlet {
 
     private final ChannelService channelService = ServiceProvider.obtainService(ChannelService.class);
 
