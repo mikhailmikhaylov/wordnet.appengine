@@ -1,6 +1,7 @@
 package org.redblaq.wordnet.domain.entities.dto;
 
-/* package */ class TextEntryDto {
+@SuppressWarnings("WeakerAccess") // Jackson
+public class TextEntryDto {
     private String word;
     private int position;
 
@@ -13,11 +14,11 @@ package org.redblaq.wordnet.domain.entities.dto;
         this.position = position;
     }
 
-    /* package */ String getWord() {
+    public String getWord() {
         return word;
     }
 
-    /* package */ int getPosition() {
+    public int getPosition() {
         return position;
     }
 }

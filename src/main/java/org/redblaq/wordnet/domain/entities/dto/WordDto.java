@@ -3,7 +3,8 @@ package org.redblaq.wordnet.domain.entities.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-/* package */ class WordDto {
+@SuppressWarnings("WeakerAccess") // Jackson
+public class WordDto {
     private String baseForm;
     private List<TextEntryDto> matchingWords = new ArrayList<>();
 
@@ -19,11 +20,11 @@ import java.util.List;
         this.matchingWords.addAll(matchingWords);
     }
 
-    /* package */ String getBaseForm() {
+    public String getBaseForm() {
         return baseForm;
     }
 
-    /* package */ List<TextEntryDto> getMatchingWords() {
+    public List<TextEntryDto> getMatchingWords() {
         return matchingWords;
     }
 }
