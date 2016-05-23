@@ -34,7 +34,7 @@ public enum CompositionRoot {
 
     // TODO:SEVERE:mikhail: Reduce the number of usages.
     public <T> T resolve(Class<T> clazz) {
-        if (registry.containsKey(clazz)) {
+        if (!registry.containsKey(clazz)) {
             throw new IllegalArgumentException("No registry found for class: " + clazz.getName());
         }
         //noinspection unchecked
