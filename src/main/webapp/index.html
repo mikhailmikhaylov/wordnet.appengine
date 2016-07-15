@@ -2,15 +2,33 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Hello and welcome to AppEngine Qarcass App</title>
-    <script data-main="scripts/index_app" src="scripts/require.js"></script>
-    <script src="/_ah/channel/jsapi"></script>
+    <title>Highlighting</title>
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="css/highlighting.css"/>
 </head>
 <body>
 <div>
-    <input type="text" id="argument" value="abandon ability ABBLIWITY"/><br>
-    <input type="text" id="result" readonly/><br>
-    <button id="submit_button">SUBMIT</button>
+    <h2>Highlighting</h2>
+    <div>
+        <h4>Text</h4>
+        <textarea class="js-original-text text-large"></textarea>
+    </div>
+    <input type="button" class="js-process-text-button" value="Process Text"/>
 </div>
+<div class="js-processing-results">
+    <div class="column">
+        <h4>Text with highlighting</h4>
+        <div class="js-text-with-highlighting text-large">
+        </div>
+    </div>
+    <div class="column">
+        <h4>Unknown Words</h4>
+        <select multiple class="js-unknown-words-list">
+        </select>
+    </div>
+</div>
+<script src="/_ah/channel/jsapi"></script>
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="js/highlighting.js"></script>
 </body>
 </html>
